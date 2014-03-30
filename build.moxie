@@ -1,0 +1,119 @@
+#
+# gitblit-powertools project descriptor
+#
+
+# Specify minimum Moxie version required to build
+requires: 0.9.1
+
+# Project Metadata
+name: gitblit-powertools
+description: Plugin providing useful enhancements for Gitblit
+groupId: com.gitblit.plugin
+artifactId: powertools
+version: 1.0.0.0.SNAPSHOT
+inceptionYear: 2014
+organization: gitblit.com
+
+# Current stable release
+releaseVersion: 1.0.0
+releaseDate: 2014-03-18
+
+# Project urls
+url: 'http://gitblit.com'
+issuesUrl: 'http://code.google.com/p/gitblit/issues/list'
+socialNetworkUrl: 'https://plus.google.com/114464678392593421684'
+forumUrl: 'http://groups.google.com/group/gitblit'
+mavenUrl: 'http://gitblit.github.io/gitblit-maven'
+
+# Licenses section included for POM generation
+licenses:
+- {
+    name: Apache ASL v2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  }
+
+# Developers section included for POM generation
+developers:
+- {
+  id: james
+  name: James Moger
+  url: 'https://plus.google.com/u/0/116428776452027956920'
+  organization: VAS
+  organizationUrl: 'http://www.vas.com'
+  roles: developer
+  }
+
+# SCM section included for POM generation
+scm: {
+  connection: 'scm:git:git://github.com/gitblit/gitblit-powertools-plugin.git'
+  developerConnection: 'scm:git:https://github.com/gitblit/gitblit-powertools-plugin.git'
+  url: 'https://github.com/gitblit/gitblit-powertools-plugin'
+  tag: HEAD
+  }
+
+# Moxie supports multiple source directories and allows you to assign
+# a scope to each directory.
+sourceDirectories:
+- compile 'src/main/java'
+
+resourceDirectories:
+- compile 'src/main/resources'
+
+# Define the main class for the build process
+mainclass: com.gitblit.plugin.powertools.Powertools
+
+# compile for Java 6 class format
+tasks: {
+	'mx:javac' : {
+        source: 1.6
+        target: 1.6
+        compiler: javac1.6
+        encoding: UTF-8
+        # stop complaints about bootstrap classpath when compiling with Java 7
+        compilerArgs: '-Xlint:-options'
+    }
+}
+
+# Generate Eclipse project files.
+# Generate IntelliJ IDEA module files.
+# Generate a distribution Maven POM (not suitable for building with Maven).
+apply: eclipse, intellij, pom
+
+# Copy all retrieved dependencies to the "ext" directory.
+# Generated IDE settings (.classpath, etc) will use the artifacts
+# from this project-relative directory. This allows the IDE settings
+# to be version-controlled and shared.
+dependencyDirectory: ext
+
+# Register the Gitblit Maven repository
+registeredRepositories:
+ - {
+   id: 'com.gitblit'
+   url: 'http://gitblit.github.io/gitblit-maven/'
+   affinity: [ 'com.gitblit' ]
+ }
+
+repositories: 'central', 'com.gitblit'
+
+# Convenience properties for dependencies
+properties: {
+    gitblit.version : 1.5.0-SNAPSHOT
+ }
+
+# Dependencies
+#
+#   May be tagged with ":label" notation to group dependencies.
+#
+#   "@extension" fetches the artifact with the specified extension
+#   and ignores all transitive dependencies.
+#
+#   "!groupId" or "!groupId:artifactId" excludes all matching transitive
+#   dependencies in that dependency's dependency graph.
+#
+
+dependencies:
+- provided 'com.gitblit:gitblit:${gitblit.version}'
+- test 'junit'
+# Dependencies with the "build" scope are retrieved
+# and injected into the Ant runtime classpath
+- build 'jacoco'

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="gitblit-powertools" default="build" xmlns:mx="antlib:org.moxie">
+
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		Retrieve Moxie Toolkit
+		
+		documentation @ http://gitblit.github.io/moxie
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<property name="moxie.version" value="0.9.1" />
+	<property name="moxie.url" value="http://gitblit.github.io/moxie/maven" />
+	<property name="moxie.jar" value="moxie-toolkit-${moxie.version}.jar" />
+	<property name="moxie.dir" value="${user.home}/.moxie" />
+	
+	<!-- Download Moxie from it's Maven repository to user.home -->
+	<mkdir dir="${moxie.dir}" />
+	<get src="${moxie.url}/com/gitblit/moxie/moxie-toolkit/${moxie.version}/${moxie.jar}"
+		dest="${moxie.dir}" skipexisting="true" verbose="true" />
+	
+	<!-- Register Moxie tasks -->
+	<taskdef uri="antlib:org.moxie">
+		<classpath location="${moxie.dir}/${moxie.jar}" />
+	</taskdef>
+	
+
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		Initialize Moxie and setup build properties
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<target name="prepare">
+	
+		<!-- Setup Ant build from build.moxie and resolve dependencies.
+		     If it exists, build.properties is automatically loaded.
+		     Explicitly set mxroot allowing CI servers to override the default. -->
+		<mx:init verbose="no" mxroot="${moxie.dir}" />
+				
+		<!-- Set Ant project properties -->
+		<property name="distribution.zipfile" value="${artifactId}-${project.version}.zip" />
+		<property name="maven.directory" value="${basedir}/../gitblit-maven" />
+
+	</target>
+
+	
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		Cleanup all build artifacts and directories
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<target name="clean" depends="prepare" description="Cleanup all build artifacts and directories">
+		
+		<!-- Clean build and target directories -->
+		<mx:clean />
+
+	</target>
+
+	
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		Compile
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<target name="compile" depends="prepare" description="compiles from source">
+		<!-- Compile project -->
+		<mx:javac scope="compile" clean="true" />
+		
+	</target>
+
+
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		Build
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<target name="build" depends="compile" description="builds the distribution">
+		<!-- Generate the plugin jar file stamped with the appropriate manifest atributes -->
+		<mx:jar destfile="${project.targetDirectory}/plugin.jar" includeResources="true" packageSources="false">
+			<manifest>
+				<attribute name="plugin-id" value ="${project.groupId}:${project.artifactId}" />
+				<attribute name="plugin-version" value="${project.version}" />
+				<attribute name="plugin-provider" value="${project.organization}" />
+				<attribute name="plugin-class" value="${project.mainclass}" />
+				<attribute name="plugin-dependencies" value="" />
+			</manifest>
+		</mx:jar>
+		
+		<!-- Unpack the built jar to a temporary folder -->
+		<property name="plugin.classes" value="${project.targetDirectory}/exploded" />
+		<unzip dest="${plugin.classes}" src="${project.targetDirectory}/plugin.jar" />
+		
+		<!-- Assemble the plugin zip file: classes in classes/ and dependencies in lib/ -->
+		<mx:zip>
+			<zipfileset prefix="classes/" dir="${plugin.classes}" />
+			<!--<zipgroupfileset prefix="classes/" file="${project.targetDirectory}/plugin.jar" /> -->
+			<dependencies prefix="lib/" />
+		</mx:zip>
+	</target>
+
+		
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		Report the compile dependencies on the console
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<target name="report" depends="prepare" description="generate dependency report">
+		
+		<!-- Report compile dependencies to the console -->
+		<mx:report scope="compile" destfile="${project.targetDirectory}/dependencies.txt" />
+		
+	</target>
+
+	
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		Test
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+	<target name="test" depends="compile" description="compiles from source and runs unit tests">
+		
+		<!-- Compile unit tests -->
+		<mx:javac scope="test" />
+		
+		<!-- Run unit tests -->
+		<mx:test failonerror="true" />
+		
+	</target>
+
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+		Tag a new version and prepare for the next development cycle.
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+	-->
+	<target name="tagRelease" depends="prepare" description="tag a new version and prepare for the next development cycle">
+		<!-- release -->
+		<property name="dryrun" value="false" />
+		<mx:version stage="release" dryrun="${dryrun}" />		
+		<property name="project.tag" value="v${project.version}" />
+		<!-- commit build.moxie & releases.moxie (automatic) -->
+		<mx:commit showtitle="no">
+		    <message>Prepare ${project.version} release</message>
+			<tag name="${project.tag}">
+				<message>${project.name} ${project.version} release</message>
+			</tag>
+		</mx:commit>
+
+		<!-- create the release process script -->
+		<mx:if>
+			<os family="windows" />
+			<then>
+				<!-- Windows PowerShell script        -->
+				<!-- set-executionpolicy remotesigned -->
+				<property name="recipe" value="release_${project.version}.ps1" />
+			</then>
+			<else>
+				<!-- Bash script -->
+				<property name="recipe" value="release_${project.version}.sh" />
+			</else>
+		</mx:if>
+		<delete file="${recipe}" failonerror="false" quiet="true" verbose="false" />
+		<!-- Work-around for lack of proper ant property substitution in copy -->
+		<property name="dollar" value="$"/>
+		<copy file="release.template" tofile="${recipe}">
+			<filterset begintoken="${dollar}{" endtoken="}">
+				<filter token="project.version" value="${project.version}" />
+				<filter token="project.commitId" value="${project.commitId}" />
+				<filter token="project.tag" value="${project.tag}" />
+				<filter token="project.directory" value="${basedir}" />
+				<filter token="maven.directory" value="${maven.directory}" />
+			</filterset>
+		</copy>
+		<chmod file="${recipe}" perm="ugo+rx" />
+
+		<!-- next cycle -->
+		<mx:version stage="snapshot" incrementNumber="incremental" dryrun="${dryrun}" />
+		<mx:commit showtitle="no">
+		    <message>Reset build identifiers for next development cycle</message>
+		</mx:commit>		
+	</target>
+</project>
