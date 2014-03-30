@@ -22,7 +22,7 @@ import com.gitblit.transport.ssh.commands.CommandMetaData;
 import com.gitblit.transport.ssh.commands.DispatchCommand;
 
 @Extension
-@CommandMetaData(name = "gitblit", aliases = {"gb"}, description = "Gitblit server commands")
+@CommandMetaData(name = "gitblit", aliases = {"gb"}, description = "Gitblit powertools commands")
 public class GitblitDispatcher extends DispatchCommand {
 
 	@Override
