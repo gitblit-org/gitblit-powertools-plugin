@@ -38,7 +38,7 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 cd ${registry.directory}
 git add .
-git commit -m "${project.version} artifacts"
+git commit -m "${project.name} ${project.version} artifacts"
 cd ${project.directory}
 
 # return to project master
