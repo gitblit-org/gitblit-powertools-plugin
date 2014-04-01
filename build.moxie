@@ -10,20 +10,16 @@ name: gitblit-powertools
 description: Plugin providing useful enhancements for Gitblit
 groupId: com.gitblit.plugin
 artifactId: powertools
-version: 1.0.0.0.SNAPSHOT
+version: 1.0.0-SNAPSHOT
+packaging: zip
 inceptionYear: 2014
 organization: gitblit.com
+url: 'http://gitblit.com'
+issuesUrl: 'http://code.google.com/p/gitblit/issues/list'
 
 # Current stable release
 releaseVersion: 1.0.0
-releaseDate: 2014-03-18
-
-# Project urls
-url: 'http://gitblit.com'
-issuesUrl: 'http://code.google.com/p/gitblit/issues/list'
-socialNetworkUrl: 'https://plus.google.com/114464678392593421684'
-forumUrl: 'http://groups.google.com/group/gitblit'
-mavenUrl: 'http://gitblit.github.io/gitblit-maven'
+releaseDate: 2014-03-31
 
 # Licenses section included for POM generation
 licenses:

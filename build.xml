@@ -35,10 +35,8 @@
 		     If it exists, build.properties is automatically loaded.
 		     Explicitly set mxroot allowing CI servers to override the default. -->
 		<mx:init verbose="no" mxroot="${moxie.dir}" />
-				
-		<!-- Set Ant project properties -->
-		<property name="distribution.zipfile" value="${artifactId}-${project.version}.zip" />
-		<property name="maven.directory" value="${basedir}/../gitblit-maven" />
+
+		<property name="registry.directory" value="${basedir}/../gitblit-registry" />
 
 	</target>
 
@@ -50,7 +48,6 @@
 	-->
 	<target name="clean" depends="prepare" description="Cleanup all build artifacts and directories">
 		
-		<!-- Clean build and target directories -->
 		<mx:clean />
 
 	</target>
@@ -62,7 +59,7 @@
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	-->
 	<target name="compile" depends="prepare" description="compiles from source">
-		<!-- Compile project -->
+
 		<mx:javac scope="compile" clean="true" />
 		
 	</target>
@@ -75,7 +72,7 @@
 	-->
 	<target name="build" depends="compile" description="builds the distribution">
 		<!-- Generate the plugin jar file stamped with the appropriate manifest atributes -->
-		<mx:jar destfile="${project.targetDirectory}/plugin.jar" includeResources="true" packageSources="false">
+		<mx:jar includeResources="true" packageSources="true">
 			<manifest>
 				<attribute name="plugin-id" value ="${project.groupId}:${project.artifactId}" />
 				<attribute name="plugin-version" value="${project.version}" />
@@ -87,7 +84,7 @@
 		
 		<!-- Unpack the built jar to a temporary folder -->
 		<property name="plugin.classes" value="${project.targetDirectory}/exploded" />
-		<unzip dest="${plugin.classes}" src="${project.targetDirectory}/plugin.jar" />
+		<unzip dest="${plugin.classes}" src="${project.targetDirectory}/${project.artifactId}-${project.version}.jar" />
 		
 		<!-- Assemble the plugin zip file: classes in classes/ and dependencies in lib/ -->
 		<mx:zip>
@@ -97,34 +94,6 @@
 		</mx:zip>
 	</target>
 
-		
-	<!--
-		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		Report the compile dependencies on the console
-		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	-->
-	<target name="report" depends="prepare" description="generate dependency report">
-		
-		<!-- Report compile dependencies to the console -->
-		<mx:report scope="compile" destfile="${project.targetDirectory}/dependencies.txt" />
-		
-	</target>
-
-	
-	<!--
-		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		Test
-		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	-->
-	<target name="test" depends="compile" description="compiles from source and runs unit tests">
-		
-		<!-- Compile unit tests -->
-		<mx:javac scope="test" />
-		
-		<!-- Run unit tests -->
-		<mx:test failonerror="true" />
-		
-	</target>
 
 	<!--
 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
@@ -134,7 +103,7 @@
 	<target name="tagRelease" depends="prepare" description="tag a new version and prepare for the next development cycle">
 		<!-- release -->
 		<property name="dryrun" value="false" />
-		<mx:version stage="release" dryrun="${dryrun}" />		
+		<mx:version stage="release" dryrun="${dryrun}" />
 		<property name="project.tag" value="v${project.version}" />
 		<!-- commit build.moxie & releases.moxie (automatic) -->
 		<mx:commit showtitle="no">
@@ -166,7 +135,7 @@
 				<filter token="project.commitId" value="${project.commitId}" />
 				<filter token="project.tag" value="${project.tag}" />
 				<filter token="project.directory" value="${basedir}" />
-				<filter token="maven.directory" value="${maven.directory}" />
+				<filter token="registry.directory" value="${registry.directory}" />
 			</filterset>
 		</copy>
 		<chmod file="${recipe}" perm="ugo+rx" />
@@ -176,5 +145,14 @@
 		<mx:commit showtitle="no">
 		    <message>Reset build identifiers for next development cycle</message>
 		</mx:commit>		
+	</target>
+
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+		Build and deploy to the registry directory without tagging.
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+	-->
+	<target name="release" depends="build">
+		<mx:deploy basedir="${registry.directory}" generateIndexPage="true" />
 	</target>
 </project>
