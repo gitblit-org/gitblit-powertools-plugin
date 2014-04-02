@@ -23,6 +23,8 @@ import org.kohsuke.args4j.Argument;
 
 import com.gitblit.Constants.AccessRestrictionType;
 import com.gitblit.Constants.AuthorizationControl;
+import com.gitblit.Constants.CommitMessageRenderer;
+import com.gitblit.Constants.FederationStrategy;
 import com.gitblit.GitBlitException;
 import com.gitblit.Keys;
 import com.gitblit.manager.IGitblit;
@@ -213,7 +215,13 @@ public class RepositoriesDispatcher extends DispatchCommand {
 		protected List<String> fieldValues = new ArrayList<String>();
 
 		protected enum Field {
-			description;
+			acceptNewPatchsets, acceptNewTickets, accessRestriction, allowAuthenticated,
+			allowForks, authorizationControl, commitMessageRenderer, description,
+			federationSets, federationStrategy, frequency, gcThreshold, gcPeriod,
+			incrementalPushTagPrefix, isFederated, isFrozen, mailingLists,
+			maxActivityCommits, mergeTo, metricAuthorExclusions, owners, preReceiveScripts,
+			postReceiveScripts, requireApproval, showRemoteBranches, skipSizeCalculation,
+			skipSummaryMetrics, useIncrementalPushTags, verifyCommitter;
 
 			static Field fromString(String name) {
 				for (Field field : values()) {
@@ -250,8 +258,92 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			IGitblit gitblit = getContext().getGitblit();
 
 			switch(field) {
+			case acceptNewPatchsets:
+				repo.acceptNewPatchsets = toBool(value);
+				break;
+			case acceptNewTickets:
+				repo.acceptNewTickets = toBool(value);
+				break;
+			case accessRestriction:
+				repo.accessRestriction = AccessRestrictionType.fromName(value);
+				break;
+			case allowAuthenticated:
+				repo.allowAuthenticated = toBool(value);
+				break;
+			case allowForks:
+				repo.allowForks = toBool(value);
+				break;
+			case authorizationControl:
+				repo.authorizationControl = AuthorizationControl.fromName(value);
+				break;
+			case commitMessageRenderer:
+				repo.commitMessageRenderer = CommitMessageRenderer.fromName(value);
+				break;
 			case description:
 				repo.description = value;
+				break;
+			case federationSets:
+				repo.federationSets = fieldValues;
+				break;
+			case federationStrategy:
+				repo.federationStrategy = FederationStrategy.fromName(value);
+				break;
+			case frequency:
+				repo.frequency = value;
+				break;
+			case gcPeriod:
+				repo.gcPeriod = toInteger(value);
+				break;
+			case gcThreshold:
+				repo.gcThreshold = value;
+				break;
+			case incrementalPushTagPrefix:
+				repo.incrementalPushTagPrefix = value;
+				break;
+			case isFederated:
+				repo.isFederated = toBool(value);
+				break;
+			case isFrozen:
+				repo.isFrozen = toBool(value);
+				break;
+			case mailingLists:
+				repo.mailingLists = fieldValues;
+				break;
+			case maxActivityCommits:
+				repo.maxActivityCommits = toInteger(value);
+				break;
+			case mergeTo:
+				repo.mergeTo = value;
+				break;
+			case metricAuthorExclusions:
+				repo.metricAuthorExclusions = fieldValues;
+				break;
+			case owners:
+				repo.owners = fieldValues;
+				break;
+			case postReceiveScripts:
+				repo.postReceiveScripts = fieldValues;
+				break;
+			case preReceiveScripts:
+				repo.preReceiveScripts = fieldValues;
+				break;
+			case requireApproval:
+				repo.requireApproval = toBool(value);
+				break;
+			case showRemoteBranches:
+				repo.showRemoteBranches = toBool(value);
+				break;
+			case skipSizeCalculation:
+				repo.skipSizeCalculation = toBool(value);
+				break;
+			case skipSummaryMetrics:
+				repo.skipSummaryMetrics = toBool(value);
+				break;
+			case useIncrementalPushTags:
+				repo.useIncrementalPushTags = toBool(value);
+				break;
+			case verifyCommitter:
+				repo.verifyCommitter = toBool(value);
 				break;
 			default:
 				throw new UnloggedFailure(1,  String.format("Field %s was not properly handled by the set command.", fieldName));
@@ -285,6 +377,15 @@ public class RepositoriesDispatcher extends DispatchCommand {
 				return false;
 			}
 			throw new UnloggedFailure(1,  String.format("Invalid boolean value %s", value));
+		}
+
+		protected int toInteger(String value) throws UnloggedFailure {
+			try {
+				int i = Integer.parseInt(value);
+				return i;
+			} catch (NumberFormatException e) {
+				throw new UnloggedFailure(1,  String.format("Invalid int value %s", value));
+			}
 		}
 	}
 
