@@ -17,12 +17,13 @@ Features that are fairly robust:
 
 - repository management:
     - lists
-    - show/details[1]
-    - creation[2]
-    - field setting[2]
-    - deletion[2]
-    - renaming[2]
-- user management[1]
+    - show/details [1]
+    - creation [3]
+    - field setting [2]
+    - deletion [2]
+    - renaming [2]
+    - fork [4]
+- user management [1]
     - lists
     - show/details
     - creation
@@ -31,7 +32,7 @@ Features that are fairly robust:
     - renaming
     - permissions
     - enabling/disabling
-- team management[1]
+- team management [1]
     - lists
     - show/details
     - creation
@@ -40,7 +41,7 @@ Features that are fairly robust:
     - renaming
     - permissions
     - memberships
-- server settings management[1]
+- server settings management [1]
     - list settings
     - dscribe/show setting
     - add setting
@@ -56,4 +57,6 @@ Features in development:
 
 [1]: Requires *admin* privileges
 [2]: Requires *admin* or *owner* privileges
+[3]: Requires *admin* or *create* privileges
+[4]: Requires *admin* or *fork* privileges
 

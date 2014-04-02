@@ -21,10 +21,10 @@ import java.util.List;
 
 import org.kohsuke.args4j.Argument;
 
-import com.gitblit.GitBlitException;
-import com.gitblit.Keys;
 import com.gitblit.Constants.AccessRestrictionType;
 import com.gitblit.Constants.AuthorizationControl;
+import com.gitblit.GitBlitException;
+import com.gitblit.Keys;
 import com.gitblit.manager.IGitblit;
 import com.gitblit.models.RegistrantAccessPermission;
 import com.gitblit.models.RepositoryModel;
@@ -50,6 +50,7 @@ public class RepositoriesDispatcher extends DispatchCommand {
 		register(user, RenameRepository.class);
 		register(user, RemoveRepository.class);
 		register(user, ShowRepository.class);
+		register(user, ForkRepository.class);
 		register(user, ListRepositories.class);
 
 		// repository-specific commands
@@ -68,7 +69,7 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			}
 			return repo;
 		}
-		
+
 		protected String sanitize(String name) throws UnloggedFailure {
 			// automatically convert backslashes to forward slashes
 			name = name.replace('\\', '/');
@@ -90,6 +91,10 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			}
 			return name;
 		}
+
+		protected String getRepositoryUrl() {
+			return getRepositoryUrl(repository);
+		}
 	}
 
 	@CommandMetaData(name = "new", aliases = { "add" }, description = "Create a new repository")
@@ -102,7 +107,7 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			UserModel user = getContext().getClient().getUser();
 
 			String name = sanitize(repository);
-			
+
 			if (!user.canCreate(name)) {
 				// try to prepend personal path
 				String path  = StringUtils.getFirstPathElement(name);
@@ -114,7 +119,7 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			if (getRepository(false) != null) {
 				throw new UnloggedFailure(1, String.format("Repository %s already exists!", name));
 			}
-						
+
 			if (!user.canCreate(name)) {
 				throw new UnloggedFailure(1,  String.format("Sorry, you do not have permission to create %s", name));
 			}
@@ -174,11 +179,11 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			if (repo.name.equalsIgnoreCase(name)) {
 				throw new UnloggedFailure(1, "Repository names are identical");
 			}
-			
+
 			if (!user.canAdmin(repo)) {
 				throw new UnloggedFailure(1,  String.format("Sorry, you do not have permission to rename %s", repository));
 			}
-			
+
 			if (!user.canCreate(name)) {
 				throw new UnloggedFailure(1, String.format("Sorry, you don't have permission to move %s to %s/", repository, name));
 			}
@@ -291,7 +296,7 @@ public class RepositoriesDispatcher extends DispatchCommand {
 		public void run() throws UnloggedFailure {
 
 			RepositoryModel repo = getRepository(true);
-			
+
 			if (!getContext().getClient().getUser().canAdmin(repo)) {
 				throw new UnloggedFailure(1,  String.format("Sorry, you do not have permission to delete %s", repository));
 			}
@@ -301,6 +306,37 @@ public class RepositoriesDispatcher extends DispatchCommand {
 				stdout.println(String.format("%s has been deleted.", repository));
 			} else {
 				throw new UnloggedFailure(1, String.format("Failed to delete %s!", repository));
+			}
+		}
+	}
+
+	@CommandMetaData(name = "fork", description = "Fork a repository")
+	@UsageExample(syntax = "${cmd} myRepo.git", description = "Fork myRepo.git")
+	public static class ForkRepository extends RepositoryCommand {
+
+		@Override
+		public void run() throws UnloggedFailure {
+
+			RepositoryModel repo = getRepository(true);
+			UserModel user = getContext().getClient().getUser();
+
+			if (!user.canFork(repo)) {
+				throw new UnloggedFailure(1,  String.format("Sorry, you do not have permission to fork %s", repository));
+			}
+
+			IGitblit gitblit = getContext().getGitblit();
+			try {
+				RepositoryModel fork = gitblit.fork(repo, user);
+				if (fork != null) {
+					stdout.println(String.format("%s has been forked.", repository));
+					stdout.println();
+					stdout.println(String.format("   git clone %s", getRepositoryUrl(fork.name)));
+					stdout.println();
+				} else {
+					throw new UnloggedFailure(1, String.format("Failed to fork %s!", repository));
+				}
+			} catch (GitBlitException e) {
+				throw new UnloggedFailure(1, String.format("Failed to fork %s!", repository), e);
 			}
 		}
 	}
@@ -428,21 +464,21 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			data[7] = new String [] { upermissions };
 			stdout.println(FlipTable.of(headers, data));
 		}
-		
+
 		protected String toString(String val) {
 			if (val == null) {
 				return "";
 			}
 			return val;
 		}
-		
+
 		protected String toString(Collection<?> collection) {
 			if (collection == null) {
 				return "";
 			}
 			return Joiner.on(", ").join(collection);
 		}
-		
+
 		protected String toString(boolean val) {
 			if (val) {
 				return "Y";
