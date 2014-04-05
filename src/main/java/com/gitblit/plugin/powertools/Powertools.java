@@ -26,11 +26,11 @@ public class Powertools extends Plugin {
 
 	@Override
 	public void start() {
-		log.info("Gitblit Powertools STARTED.");
+		log.debug("Gitblit Powertools STARTED.");
 	}
 
 	@Override
 	public void stop() {
-		log.info("Gitblit Powertools STOPPED.");
+		log.debug("Gitblit Powertools STOPPED.");
 	}
 }
