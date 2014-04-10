@@ -29,6 +29,7 @@ public class GitblitDispatcher extends DispatchCommand {
 	protected void setup(UserModel user) {
 		// commands in this dispatcher
 		register(user, ConfigCommand.class);
+		register(user, ResetCommand.class);
 
 		// nested dispatchers
 		register(user, ListDispatcher.class);

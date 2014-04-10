@@ -10,7 +10,7 @@ name: gitblit-powertools
 description: Plugin providing useful enhancements for Gitblit
 groupId: com.gitblit.plugin
 artifactId: powertools
-version: 1.0.1-SNAPSHOT
+version: 1.1.0-SNAPSHOT
 packaging: zip
 inceptionYear: 2014
 organization: gitblit.com
