@@ -18,6 +18,7 @@ package com.gitblit.plugin.powertools;
 import com.gitblit.models.UserModel;
 import com.gitblit.transport.ssh.commands.CommandMetaData;
 import com.gitblit.transport.ssh.commands.DispatchCommand;
+import com.gitblit.transport.ssh.commands.PluginDispatcher;
 
 /**
  * The dispatcher and it's commands for Gitblit object listing.
@@ -33,6 +34,9 @@ public class ListDispatcher extends DispatchCommand {
 		register(user, ListRepositories.class);
 		register(user, ListProjects.class);
 		register(user, ListUsers.class);
+		register(user, ListTeams.class);
+		register(user, ListTickets.class);
+		register(user, ListPlugins.class);
 	}
 
 	/* List repositories */
@@ -49,4 +53,20 @@ public class ListDispatcher extends DispatchCommand {
 	@CommandMetaData(name = "users", description = "List users", admin = true)
 	public static class ListUsers extends UsersDispatcher.ListUsers {
 	}
+
+	/* List teams */
+	@CommandMetaData(name = "teams", description = "List teams", admin = true)
+	public static class ListTeams extends TeamsDispatcher.ListTeams {
+	}
+
+	/* List tickets */
+	@CommandMetaData(name = "tickets", description = "List tickets")
+	public static class ListTickets extends TicketsDispatcher.ListTickets {
+	}
+
+	/* List plugins */
+	@CommandMetaData(name = "plugins", description = "List plugins", admin = true)
+	public static class ListPlugins extends PluginDispatcher.ListPlugins {
+	}
+
 }
