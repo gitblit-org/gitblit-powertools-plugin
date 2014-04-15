@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>gitblit-powertools</name>
-	<comment>Plugin providing useful enhancements for Gitblit</comment>
+	<name>gitblit-powertools-plugin</name>
+	<comment>Control and command Gitblit over SSH</comment>
 	<projects>
 	</projects>
 	<buildSpec>

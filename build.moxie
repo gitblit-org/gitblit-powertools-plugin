@@ -1,16 +1,16 @@
 #
-# gitblit-powertools project descriptor
+# gitblit-powertools-plugin project descriptor
 #
 
 # Specify minimum Moxie version required to build
 requires: 0.9.1
 
 # Project Metadata
-name: gitblit-powertools
-description: Plugin providing useful enhancements for Gitblit
+name: gitblit-powertools-plugin
+description: Control and command Gitblit over SSH
 groupId: com.gitblit.plugin
 artifactId: powertools
-version: 1.1.1-SNAPSHOT
+version: 1.2.0-SNAPSHOT
 packaging: zip
 inceptionYear: 2014
 organization: gitblit.com
@@ -56,14 +56,14 @@ resourceDirectories:
 - compile 'src/main/resources'
 
 # Define the main class for the build process
-mainclass: com.gitblit.plugin.powertools.Powertools
+mainclass: com.gitblit.plugin.powertools.Plugin
 
-# compile for Java 6 class format
+# compile for Java 7 class format
 tasks: {
 	'mx:javac' : {
-        source: 1.6
-        target: 1.6
-        compiler: javac1.6
+        source: 1.7
+        target: 1.7
+        compiler: javac1.7
         encoding: UTF-8
         # stop complaints about bootstrap classpath when compiling with Java 7
         compilerArgs: '-Xlint:-options'

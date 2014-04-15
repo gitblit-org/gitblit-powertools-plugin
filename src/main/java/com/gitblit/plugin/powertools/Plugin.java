@@ -15,12 +15,13 @@
  */
 package com.gitblit.plugin.powertools;
 
-import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
-public class Powertools extends Plugin {
+import com.gitblit.extensions.GitblitPlugin;
 
-	public Powertools(PluginWrapper wrapper) {
+public class Plugin extends GitblitPlugin {
+
+	public Plugin(PluginWrapper wrapper) {
 		super(wrapper);
 	}
 

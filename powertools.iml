@@ -15,7 +15,9 @@
           <root url="jar://$MODULE_DIR$/ext/gitblit-1.5.0-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/ext/src/gitblit-1.5.0-SNAPSHOT.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -96,35 +98,24 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="javax.servlet-api-3.0.1.jar">
+      <library name="javax.servlet-api-3.1.0.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/javax.servlet-api-3.0.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/javax.servlet-api-3.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/ext/src/javax.servlet-api-3.0.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/src/javax.servlet-api-3.1.0.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="jetty-webapp-8.1.13.v20130916.jar">
+      <library name="jetty-all-9.1.4.v20140401.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/jetty-webapp-8.1.13.v20130916.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/jetty-all-9.1.4.v20140401.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/ext/src/jetty-webapp-8.1.13.v20130916.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jetty-ajp-8.1.13.v20130916.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/jetty-ajp-8.1.13.v20130916.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/ext/src/jetty-ajp-8.1.13.v20130916.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/src/jetty-all-9.1.4.v20140401.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -158,17 +149,6 @@
         <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/ext/src/wicket-extensions-1.4.21.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="googlecharts-1.4.21.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/googlecharts-1.4.21.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/ext/src/googlecharts-1.4.21.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -785,13 +765,13 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="pf4j-0.7.0.jar">
+      <library name="pf4j-0.8.0-SNAPSHOT.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/pf4j-0.7.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/pf4j-0.8.0-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/ext/src/pf4j-0.7.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/src/pf4j-0.8.0-SNAPSHOT.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
