@@ -44,18 +44,18 @@ import com.google.common.base.Joiner;
 public class TeamsDispatcher extends DispatchCommand {
 
 	@Override
-	protected void setup(UserModel user) {
+	protected void setup() {
 		// primary team commands
-		register(user, NewTeam.class);
-		register(user, RenameTeam.class);
-		register(user, RemoveTeam.class);
-		register(user, ShowTeam.class);
-		register(user, ListTeams.class);
+		register(NewTeam.class);
+		register(RenameTeam.class);
+		register(RemoveTeam.class);
+		register(ShowTeam.class);
+		register(ListTeams.class);
 
 		// team-specific commands
-		register(user, SetField.class);
-		register(user, Permissions.class);
-		register(user, Members.class);
+		register(SetField.class);
+		register(Permissions.class);
+		register(Members.class);
 	}
 
 	public static abstract class TeamCommand extends SshCommand {

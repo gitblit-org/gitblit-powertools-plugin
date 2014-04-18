@@ -45,19 +45,19 @@ import com.google.common.base.Joiner;
 public class UsersDispatcher extends DispatchCommand {
 
 	@Override
-	protected void setup(UserModel user) {
+	protected void setup() {
 		// primary user commands
-		register(user, NewUser.class);
-		register(user, RenameUser.class);
-		register(user, RemoveUser.class);
-		register(user, ShowUser.class);
-		register(user, ListUsers.class);
+		register(NewUser.class);
+		register(RenameUser.class);
+		register(RemoveUser.class);
+		register(ShowUser.class);
+		register(ListUsers.class);
 
 		// user-specific commands
-		register(user, SetField.class);
-		register(user, Permissions.class);
-		register(user, DisableUser.class);
-		register(user, EnableUser.class);
+		register(SetField.class);
+		register(Permissions.class);
+		register(DisableUser.class);
+		register(EnableUser.class);
 	}
 
 	public static abstract class UserCommand extends SshCommand {

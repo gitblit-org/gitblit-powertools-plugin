@@ -15,7 +15,6 @@
  */
 package com.gitblit.plugin.powertools;
 
-import com.gitblit.models.UserModel;
 import com.gitblit.transport.ssh.commands.CommandMetaData;
 import com.gitblit.transport.ssh.commands.DispatchCommand;
 import com.gitblit.transport.ssh.commands.PluginDispatcher;
@@ -30,13 +29,13 @@ import com.gitblit.transport.ssh.commands.PluginDispatcher;
 public class ListDispatcher extends DispatchCommand {
 
 	@Override
-	protected void setup(UserModel user) {
-		register(user, ListRepositories.class);
-		register(user, ListProjects.class);
-		register(user, ListUsers.class);
-		register(user, ListTeams.class);
-		register(user, ListTickets.class);
-		register(user, ListPlugins.class);
+	protected void setup() {
+		register(ListRepositories.class);
+		register(ListProjects.class);
+		register(ListUsers.class);
+		register(ListTeams.class);
+		register(ListTickets.class);
+		register(ListPlugins.class);
 	}
 
 	/* List repositories */

@@ -17,7 +17,6 @@ package com.gitblit.plugin.powertools;
 
 import ro.fortsoft.pf4j.Extension;
 
-import com.gitblit.models.UserModel;
 import com.gitblit.transport.ssh.commands.CommandMetaData;
 import com.gitblit.transport.ssh.commands.DispatchCommand;
 
@@ -26,17 +25,17 @@ import com.gitblit.transport.ssh.commands.DispatchCommand;
 public class GitblitDispatcher extends DispatchCommand {
 
 	@Override
-	protected void setup(UserModel user) {
+	protected void setup() {
 		// commands in this dispatcher
-		register(user, ConfigCommand.class);
-		register(user, ResetCommand.class);
+		register(ConfigCommand.class);
+		register(ResetCommand.class);
 
 		// nested dispatchers
-		register(user, ListDispatcher.class);
-		register(user, TicketsDispatcher.class);
-		register(user, UsersDispatcher.class);
-		register(user, TeamsDispatcher.class);
-		register(user, ProjectsDispatcher.class);
-		register(user, RepositoriesDispatcher.class);
+		register(ListDispatcher.class);
+		register(TicketsDispatcher.class);
+		register(UsersDispatcher.class);
+		register(TeamsDispatcher.class);
+		register(ProjectsDispatcher.class);
+		register(RepositoriesDispatcher.class);
 	}
 }

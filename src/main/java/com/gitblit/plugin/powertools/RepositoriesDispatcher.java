@@ -46,17 +46,17 @@ import com.google.common.base.Joiner;
 public class RepositoriesDispatcher extends DispatchCommand {
 
 	@Override
-	protected void setup(UserModel user) {
+	protected void setup() {
 		// primary commands
-		register(user, NewRepository.class);
-		register(user, RenameRepository.class);
-		register(user, RemoveRepository.class);
-		register(user, ShowRepository.class);
-		register(user, ForkRepository.class);
-		register(user, ListRepositories.class);
+		register(NewRepository.class);
+		register(RenameRepository.class);
+		register(RemoveRepository.class);
+		register(ShowRepository.class);
+		register(ForkRepository.class);
+		register(ListRepositories.class);
 
 		// repository-specific commands
-		register(user, SetField.class);
+		register(SetField.class);
 	}
 
 	public static abstract class RepositoryCommand extends SshCommand {

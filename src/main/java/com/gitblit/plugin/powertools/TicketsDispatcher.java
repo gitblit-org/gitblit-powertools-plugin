@@ -22,7 +22,6 @@ import org.kohsuke.args4j.Argument;
 import com.gitblit.manager.IGitblit;
 import com.gitblit.models.RepositoryModel;
 import com.gitblit.models.TicketModel.Status;
-import com.gitblit.models.UserModel;
 import com.gitblit.tickets.ITicketService;
 import com.gitblit.tickets.QueryBuilder;
 import com.gitblit.tickets.QueryResult;
@@ -39,9 +38,9 @@ import com.gitblit.utils.StringUtils;
 public class TicketsDispatcher extends DispatchCommand {
 
 	@Override
-	protected void setup(UserModel user) {
-		register(user, ReviewCommand.class);
-		register(user, ListTickets.class);
+	protected void setup() {
+		register(ReviewCommand.class);
+		register(ListTickets.class);
 	}
 
 	/* List tickets */

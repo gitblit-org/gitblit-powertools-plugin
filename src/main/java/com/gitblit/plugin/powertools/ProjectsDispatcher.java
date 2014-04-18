@@ -30,8 +30,8 @@ import com.gitblit.utils.FlipTable.Borders;
 public class ProjectsDispatcher extends DispatchCommand {
 
 	@Override
-	protected void setup(UserModel user) {
-		register(user, ListProjects.class);
+	protected void setup() {
+		register(ListProjects.class);
 	}
 
 	/* List projects */
