@@ -10,7 +10,7 @@ name: gitblit-powertools-plugin
 description: Control and command Gitblit over SSH
 groupId: com.gitblit.plugin
 artifactId: powertools
-version: 1.2.0-SNAPSHOT
+version: 1.2.0
 packaging: zip
 inceptionYear: 2014
 organization: gitblit.com
@@ -18,8 +18,8 @@ url: 'http://gitblit.com'
 issuesUrl: 'http://code.google.com/p/gitblit/issues/list'
 
 # Current stable release
-releaseVersion: 1.1.0
-releaseDate: 2014-04-10
+releaseVersion: 1.2.0
+releaseDate: 2014-04-18
 
 # Licenses section included for POM generation
 licenses:
