@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java" />
 	<classpathentry kind="src" path="src/main/resources" />
-	<classpathentry kind="lib" path="ext/gitblit-1.5.0-SNAPSHOT.jar" sourcepath="ext/src/gitblit-1.5.0-SNAPSHOT.jar" />
+	<classpathentry kind="lib" path="ext/gitblit-1.5.0.jar" sourcepath="ext/src/gitblit-1.5.0.jar" />
 	<classpathentry kind="lib" path="ext/dagger-1.1.0.jar" sourcepath="ext/src/dagger-1.1.0.jar" />
 	<classpathentry kind="lib" path="ext/javax.inject-1.jar" sourcepath="ext/src/javax.inject-1.jar" />
 	<classpathentry kind="lib" path="ext/annotations-12.0.jar" sourcepath="ext/src/annotations-12.0.jar" />

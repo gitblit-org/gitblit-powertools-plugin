@@ -93,7 +93,7 @@ repositories: 'central', 'com.gitblit'
 
 # Convenience properties for dependencies
 properties: {
-    gitblit.version : 1.5.0-SNAPSHOT
+    gitblit.version : 1.5.0
  }
 
 # Dependencies

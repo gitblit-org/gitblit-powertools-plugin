@@ -10,13 +10,13 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library" scope="PROVIDED">
-      <library name="gitblit-1.5.0-SNAPSHOT.jar">
+      <library name="gitblit-1.5.0.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/gitblit-1.5.0-SNAPSHOT.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/gitblit-1.5.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/ext/src/gitblit-1.5.0-SNAPSHOT.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/src/gitblit-1.5.0.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
