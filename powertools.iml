@@ -70,7 +70,9 @@
           <root url="jar://$MODULE_DIR$/ext/slf4j-api-1.7.5.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/ext/src/slf4j-api-1.7.5.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -79,7 +81,9 @@
           <root url="jar://$MODULE_DIR$/ext/slf4j-log4j12-1.7.5.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/ext/src/slf4j-log4j12-1.7.5.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
