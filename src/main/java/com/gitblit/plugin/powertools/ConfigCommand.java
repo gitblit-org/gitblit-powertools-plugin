@@ -153,7 +153,7 @@ public class ConfigCommand extends SshCommand {
 					stdout.println(String.format("failed to reset %s!", setting));
 				}
 			}
-			
+
 		} else if (!StringUtils.isEmpty(setting) && value != null) {
 			/*
 			 *  Update a setting
@@ -167,7 +167,7 @@ public class ConfigCommand extends SshCommand {
 			if (value.equals(newValue)) {
 				stdout.println(String.format("%s updated.", setting));
 				SettingModel model = settings.get(setting);
-				if (model.restartRequired) {
+				if (model != null && model.restartRequired) {
 					stdout.println(SettingModel.RESTART_REQUIRED);
 				}
 			} else {
