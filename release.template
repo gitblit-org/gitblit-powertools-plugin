@@ -38,7 +38,7 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 cd ${registry.directory}
 git add .
-git commit -m "${project.name} ${project.version} artifacts"
+git commit -m "${project.artifactId} ${project.version} artifacts"
 cd ${project.directory}
 
 # return to project master
@@ -66,3 +66,8 @@ echo "Pushing master and tag ${project.tag}"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 git push origin master tag ${project.tag}
+
+# display registry reminder
+echo ""
+echo "REMEMBER: You must add a release entry for ${project.artifactId} ${project.version}"
+echo "in plugins.json and re-run checksums.sh!"
