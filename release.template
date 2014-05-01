@@ -70,4 +70,4 @@ git push origin master tag ${project.tag}
 # display registry reminder
 echo ""
 echo "REMEMBER: You must add a release entry for ${project.artifactId} ${project.version}"
-echo "in plugins.json and re-run checksums.sh!"
+echo "          in plugins.json and re-run checksums.sh!"
