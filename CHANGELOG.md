@@ -2,6 +2,8 @@
 
 ## 1.3.0
 
+- Added --mirror URL option when creating a new repository
+- Ensure .git is appended to the names of new repositories
 - Fix an error in configuring new settings
 
 ## 1.2.0

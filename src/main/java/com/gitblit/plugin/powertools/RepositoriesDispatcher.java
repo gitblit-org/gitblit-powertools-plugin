@@ -15,11 +15,21 @@
  */
 package com.gitblit.plugin.powertools;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.NullProgressMonitor;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.Option;
 
 import com.gitblit.Constants.AccessRestrictionType;
 import com.gitblit.Constants.AuthorizationControl;
@@ -36,7 +46,9 @@ import com.gitblit.transport.ssh.commands.DispatchCommand;
 import com.gitblit.transport.ssh.commands.ListFilterCommand;
 import com.gitblit.transport.ssh.commands.SshCommand;
 import com.gitblit.transport.ssh.commands.UsageExample;
+import com.gitblit.transport.ssh.commands.UsageExamples;
 import com.gitblit.utils.ArrayUtils;
+import com.gitblit.utils.FileUtils;
 import com.gitblit.utils.FlipTable;
 import com.gitblit.utils.FlipTable.Borders;
 import com.gitblit.utils.StringUtils;
@@ -100,15 +112,26 @@ public class RepositoriesDispatcher extends DispatchCommand {
 	}
 
 	@CommandMetaData(name = "new", aliases = { "add" }, description = "Create a new repository")
-	@UsageExample(syntax = "${cmd} myRepo")
+	@UsageExamples(examples = {
+			@UsageExample(syntax = "${cmd} myRepo", description = "Create a repository named 'myRepo'"),
+			@UsageExample(syntax = "${cmd} myMirror --mirror https://github.com/gitblit/gitblit.git",
+				description = "Create a mirror named 'myMirror'"),
+	})
 	public static class NewRepository extends RepositoryCommand {
 
+		@Option(name = "--mirror", aliases = {"-m" }, metaVar = "URL", usage = "URL of repository to mirror")
+		String src;
+
 		@Override
-		public void run() throws UnloggedFailure {
+		public void run() throws Failure {
 
 			UserModel user = getContext().getClient().getUser();
 
 			String name = sanitize(repository);
+
+			if (!name.endsWith(Constants.DOT_GIT)) {
+				name += Constants.DOT_GIT;
+			}
 
 			if (!user.canCreate(name)) {
 				// try to prepend personal path
@@ -128,6 +151,44 @@ public class RepositoriesDispatcher extends DispatchCommand {
 
 			IGitblit gitblit = getContext().getGitblit();
 
+			if (!StringUtils.isEmpty(src)) {
+				// Mirror repository
+				// JGit doesn't support --mirror so we have to accomplish this in a few steps
+				File repositoriesFolder = gitblit.getRepositoriesFolder();
+				File repoFolder = new File(repositoriesFolder, name);
+				Repository repository = null;
+				try {
+					// step 1: clone what we can
+					CloneCommand clone = new CloneCommand();
+					clone.setBare(true);
+					clone.setCloneAllBranches(true);
+					clone.setURI(src);
+					clone.setDirectory(repoFolder);
+					clone.setProgressMonitor(NullProgressMonitor.INSTANCE);
+					repository = clone.call().getRepository();
+
+					// step 2: update config to modify refspecs and flag as mirror
+					StoredConfig config = repository.getConfig();
+					config.setString("remote", "origin", "fetch", "+refs/*:refs/*");
+					config.setBoolean("remote", "origin", "mirror", true);
+					config.save();
+
+					// step 3: fetch
+					Git git = new Git(repository);
+					git.fetch().setProgressMonitor(NullProgressMonitor.INSTANCE).call();
+				} catch (GitAPIException |IOException e) {
+					if (repoFolder.exists()) {
+						FileUtils.delete(repoFolder);
+					}
+					throw new Failure(1, String.format("Failed to mirror %s", src), e);
+				} finally {
+					if (repository != null) {
+						repository.close();
+					}
+				}
+			}
+
+			// Standard create repository
 			RepositoryModel repo = new RepositoryModel();
 			repo.name = name;
 			repo.projectPath = StringUtils.getFirstPathElement(name);
@@ -144,8 +205,12 @@ public class RepositoriesDispatcher extends DispatchCommand {
 			}
 
 			try {
-				gitblit.updateRepositoryModel(repository,  repo, true);
-				stdout.println(String.format("%s created.", repo.name));
+				gitblit.updateRepositoryModel(repo.name,  repo, StringUtils.isEmpty(src));
+				if (StringUtils.isEmpty(src)) {
+					stdout.println(String.format("'%s' created.", repo.name));
+				} else {
+					stdout.println(String.format("'%s' created as mirror of %s.", repo.name, src));
+				}
 			} catch (GitBlitException e) {
 				log.error("Failed to add " + repository, e);
 				throw new UnloggedFailure(1, e.getMessage());
