@@ -2,15 +2,7 @@
 
 *REQUIRES 1.5.0*
 
-The Gitblit Powertools plugin enhances Gitblit with several very useful features.
-
-### Features
-
-- gitblit (gb) SSH Command Dispatcher
-
-#### gitblit (gb) SSH Command Dispatcher
-
-This plugin exposes convenient user controls and server management & administration commands through the pluggable SSH command server.
+The Gitblit Powertools plugin exposes convenient user controls and server management & administration commands through the pluggable SSH command server.
 
 ##### Implemented Features
 
@@ -18,6 +10,7 @@ This plugin exposes convenient user controls and server management & administrat
     - lists
     - show/details [1]
     - creation [3]
+    - mirror creation [3]
     - field setting [2]
     - deletion [2]
     - renaming [2]
