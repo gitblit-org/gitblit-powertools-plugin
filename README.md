@@ -4,6 +4,20 @@
 
 The Gitblit Powertools plugin exposes convenient user controls and server management & administration commands through the pluggable SSH command server.
 
+### Installation
+
+This plugin is referenced in the Gitblit Plugin Registry and you may install it using SSH with an administrator account.
+
+    ssh host plugin refresh
+    ssh host plugin install powertools
+    ssh host plugin ls
+
+Alternatively, you can download the zip from [here](http://plugins.gitblit.com) manually copy it to your `${baseFolder}/plugins` directory.
+
+### Usage
+
+Each command has built-in help.
+
 ##### Implemented Features
 
 - repository management:
