@@ -80,6 +80,7 @@
 				<attribute name="plugin-description" value ="${project.description}" />
 				<attribute name="plugin-provider" value="${project.organization}" />
 				<attribute name="plugin-class" value="${project.mainclass}" />
+		        <attribute name="plugin-requires" value="${gitblit.version}" />
 				<attribute name="plugin-dependencies" value="" />
 			</manifest>
 		</mx:jar>
