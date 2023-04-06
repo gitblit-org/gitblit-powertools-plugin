@@ -37,7 +37,7 @@ James Moger
 
 RESOURCES
 ---------
-<https://github.com/gitblit/gitblit-powertools-plugin>
+<https://github.com/gitblit-org/gitblit-powertools-plugin>
 
 Powertools
 --------

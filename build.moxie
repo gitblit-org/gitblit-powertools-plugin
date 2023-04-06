@@ -15,7 +15,7 @@ packaging: zip
 inceptionYear: 2014
 organization: gitblit.com
 url: 'http://gitblit.com'
-issuesUrl: 'https://github.com/gitblit/gitblit-powertools-plugin/issues'
+issuesUrl: 'https://github.com/gitblit-org/gitblit-powertools-plugin/issues'
 
 # Current stable release
 releaseVersion: 1.3.0
@@ -41,9 +41,9 @@ developers:
 
 # SCM section included for POM generation
 scm: {
-  connection: 'scm:git:git://github.com/gitblit/gitblit-powertools-plugin.git'
-  developerConnection: 'scm:git:https://github.com/gitblit/gitblit-powertools-plugin.git'
-  url: 'https://github.com/gitblit/gitblit-powertools-plugin'
+  connection: 'scm:git:git://github.com/gitblit-org/gitblit-powertools-plugin.git'
+  developerConnection: 'scm:git:https://github.com/gitblit-org/gitblit-powertools-plugin.git'
+  url: 'https://github.com/gitblit-org/gitblit-powertools-plugin'
   tag: HEAD
   }
 
@@ -85,7 +85,7 @@ dependencyDirectory: ext
 registeredRepositories:
  - {
    id: 'com.gitblit'
-   url: 'http://gitblit.github.io/gitblit-maven/'
+   url: 'http://gitblit-org.github.io/gitblit-maven/'
    affinity: [ 'com.gitblit' ]
  }
 

@@ -114,7 +114,7 @@ public class RepositoriesDispatcher extends DispatchCommand {
 	@CommandMetaData(name = "new", aliases = { "add" }, description = "Create a new repository")
 	@UsageExamples(examples = {
 			@UsageExample(syntax = "${cmd} myRepo", description = "Create a repository named 'myRepo'"),
-			@UsageExample(syntax = "${cmd} myMirror --mirror https://github.com/gitblit/gitblit.git",
+			@UsageExample(syntax = "${cmd} myMirror --mirror https://github.com/gitblit-org/gitblit.git",
 				description = "Create a mirror named 'myMirror'"),
 	})
 	public static class NewRepository extends RepositoryCommand {
